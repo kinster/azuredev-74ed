@@ -19,6 +19,10 @@ vision_client = AzureVisionOCRClient(
     api_key=os.getenv("AZURE_CV_KEY")
 )
 
+# Debug: Print environment variables
+print(os.getenv("AZURE_CV_ENDPOINT"))
+print(os.getenv("AZURE_CV_KEY")[:5])
+
 # Directories
 image_dir = "images"
 output_dir = "results"
@@ -27,70 +31,74 @@ os.makedirs(output_dir, exist_ok=True)
 
 # Prompts
 system_prompt = """
-You are an AI assistant trained to support a drylining estimation workflow.
+You are a construction AI assistant. You specialize in interpreting architectural floor plans and drylining technical detail sheets.
 
-You receive architectural floor plans and technical detail drawings as input. Your role is to:
+You are given:
+- A floor plan image that shows wall type labels and scale
+- One or more technical detail drawings that define the meaning of each wall type (e.g. WL.403, SW.401)
+- OCR-extracted text from the plan image (optional, but included if available)
 
-1. Parse the drawing and interpret the construction scale (e.g., 1:100 or 1:125).
-2. Detect key features such as partitions, ceilings, fixtures, and structural elements.
-3. Identify wall types (e.g. DW.451, SW.401) based on tags and line styles.
-4. Measure each wall’s approximate length and height (where visible).
-5. Measure ceiling areas and count openings (windows, hatches, doors).
-6. Match each identified wall or ceiling type with its specification from technical detail sheets.
-7. Estimate total material quantities based on standard drylining systems (e.g., boards, fixings, MF ceilings).
-8. Apply labour productivity rates and waste factors to generate cost estimates.
-9. Output a Bill of Quantities (BoQ) in markdown format with clear columns:
-   Wall Type | Count | Total Length (m) | Description | Materials | Labour Hours
+Your task is to:
+1. Identify and list all unique wall types (e.g. WL.401, DW.451)
+2. Count how many times each appears
+3. Estimate the total length for each using the scale shown on the drawing (e.g., 1:125)
+4. Match each wall type to a description from the technical drawings
 
-You must rely solely on visible annotations, line types, and tags in the drawings to determine the above. Where information is ambiguous or missing, annotate this clearly in the summary.
+Return the results in a table like this:
 
-Use markdown formatting for output. Respond in a structured, concise, and professional format suitable for export.
+| Wall Type | Count | Total Length (m) | Description                     |
+|-----------|-------|------------------|---------------------------------|
+| WL.401    | 6     | ~35              | Standard wall lining system     |
+| DW.451    | 4     | ~22              | Demountable dry wall partition  |
+
+If descriptions are not clearly visible or defined, provide a best-guess based on naming patterns.
+Also include a summary of any assumptions.
 """
 
-user_prompt = """
-Analyze the submitted architectural floor plan and wall detail drawings. Perform the following tasks:
-
-- Detect and count each distinct wall or ceiling type based on visible tags (e.g. DW.451, WL.403).
-- Measure total lengths (and heights, if available) for walls using the plan scale.
-- Calculate approximate areas for ceilings.
-- Count openings (e.g. hatches, windows, doors).
-- Retrieve descriptions for each wall/ceiling type from the detail sheets.
-- Estimate required materials using typical drylining systems.
-- Apply labour assumptions to each item using productivity norms.
-
-Output a structured markdown report with:
-
-1. Table: Wall/Ceiling Type | Count | Length/Area | Description | Materials | Labour
-2. Summary: Key assumptions, uncertainties, and dominant system types
-
-Only include elements that can be visually confirmed from the images.
-"""
-
-# Collect output
+# Store final results
 all_outputs = []
 
 # Process each image
 for filename in sorted(os.listdir(image_dir)):
     if filename.lower().endswith((".png", ".jpg", ".jpeg")):
         filepath = os.path.join(image_dir, filename)
+
+        # Read and encode image
         with open(filepath, "rb") as f:
             base64_image = base64.b64encode(f.read()).decode("utf-8")
 
-        # Extract OCR text for the image
+        # 🔍 Extract OCR text for the current image
         ocr_text = vision_client.extract_ocr_text(filepath)
+        print(f"🔍 OCR for {filename}:\n{ocr_text[:300]}...")  # Preview first 300 chars
 
-        print(f"🔍 Analyzing {filename}...")
+        # 👤 User prompt including the OCR text
+        user_prompt = f"""
+This is the OCR text extracted from a floor plan image showing internal wall types:
 
+{ocr_text}
+
+Please:
+- List all unique wall types (e.g. SW.401, WL.404, DW.453)
+- Count how many times each type appears in the image/OCR text
+- Estimate total length using the drawing scale (1:125)
+- Cross-reference wall types with technical details (if separate drawings are provided)
+- Return a structured markdown table with type, count, total length in metres, and description
+
+The images of the floor plan and detail sheets will be passed alongside this prompt.
+"""
+
+        # 🧠 Send to GPT-4o (Azure OpenAI)
         result = openai_client.analyze_image_with_text(
             system_prompt=system_prompt,
-            user_prompt=user_prompt + "\n\nOCR Extracted Text:\n" + ocr_text,
+            user_prompt=user_prompt,
             base64_image=base64_image
         )
 
+        # 📦 Collect output per image
         formatted = f"## 🖼️ {filename}\n\n{result}"
         all_outputs.append(formatted)
 
-# Final markdown content
+# 🧾 Final combined report
 timestamp = datetime.now().strftime('%Y-%m-%d %H:%M')
 full_report = f"# 🧱 Wall Analysis Report\nGenerated on {timestamp}\n\n" + "\n\n".join(all_outputs)
 
