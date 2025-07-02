@@ -5,6 +5,9 @@ from openai_client import AzureOpenAIClient
 from vision_ocr import AzureVisionOCRClient
 from datetime import datetime
 from rich.console import Console
+from weasyprint import HTML
+import markdown
+from weasyprint import HTML, CSS
 
 # Load API credentials
 load_dotenv()
@@ -107,6 +110,36 @@ with open(output_file, "w", encoding="utf-8") as f:
     f.write(full_report)
 
 print(f"\n✅ Markdown report saved to: {output_file}\n")
+
+# Optional: save markdown file
+with open("wall_analysis_report.md", "w") as f:
+    f.write(full_report)
+
+# Ensure output directory exists
+os.makedirs("results", exist_ok=True)
+
+# Save markdown (optional)
+with open("results/wall_analysis_report.md", "w") as f:
+    f.write(full_report)
+
+# Convert to HTML
+html_content = markdown.markdown(full_report, extensions=["tables"])
+wrapped_html = f"<html><body>{html_content}</body></html>"
+
+# Write to PDF with optional styling
+HTML(string=wrapped_html).write_pdf(
+    "results/wall_analysis_report.pdf",
+    stylesheets=[CSS(string="""
+        body { font-family: Arial, sans-serif; font-size: 12px; }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid #ccc; padding: 6px; text-align: left; }
+        th { background-color: #f2f2f2; }
+    """)]
+)
+
+print("✅ PDF written to results/wall_analysis_report.pdf")
+
+
 
 # Print to console at the end
 console = Console()
