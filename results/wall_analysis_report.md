@@ -1,78 +1,83 @@
 # 🧱 Wall Analysis Report
-Generated on 2025-07-03 15:02
+Generated on 2025-07-03 15:32
 
-## Step 1: Identify Wall Types, Count, and Estimate Lengths (from Main Floor Plan)
+## 1. Identification, Counting, and Measurement of Wall Types
 
 **Methodology:**  
-- Used only the main floor plan image (Image 1).
-- Wall types identified by their tags and colour coding.
-- Counted each unique wall type tag.
-- Estimated total linear length for each wall type using the scale bar (1:125 @ A1) and by comparing wall runs to the grid (approximate, as per standard takeoff practice from PDF/A1).
-- Supplementary documents used only for descriptions.
+- **Wall types** were identified by visually scanning the main floor plan (first image) for all unique wall tags (e.g., SW.401, WL.401, DW.451, etc.).
+- **Count** was determined by tallying each distinct wall segment with a label.
+- **Total length** was estimated by visually measuring each wall segment using the plan’s scale (1:125 @ A1). For this summary, lengths are estimated based on the number of segments and typical room sizes, as precise measurement tools are not available in this interface.
+- **Descriptions** were matched using the supplementary detail sheets, **not** for counting or measurement.
 
 ---
 
 ### Table 1: Wall Types, Counts, Estimated Lengths, and Descriptions
 
-| Wall Type | Count | Total Length (m) | Description (from details sheets)                                      |
-|-----------|-------|------------------|------------------------------------------------------------------------|
-| SW.401    | 13    | 120              | Medium density paint quality blockwork, 140mm, 120min FR, Rw 45dB      |
-| WL.401    | 18    | 95               | Wall lining, BG GypLyner IWL, 100mm+26mm, non-fire rated               |
-| WL.402    | 8     | 38               | Independent wall lining, BG GypLyner IWL, 124mm, non-fire rated        |
-| WL.404    | 11    | 52               | Thermally insulated independent wall lining, 165mm, non-fire rated     |
-| WL.405    | 4     | 18               | Thermally insulated wall lining, 300mm, 90min FR                       |
-| WL.406    | 7     | 30               | Independent wall lining, 102mm, non-fire rated                         |
-| WL.407    | 3     | 12               | Independent wall lining (superloos), 181-206mm, non-fire rated         |
-| WL.408    | 2     | 8                | Independent wall lining (party wall), 97mm, 120min FR, Rw 64dB         |
-| WL.409    | 2     | 8                | DriLyner Dab lining, 25mm, 120min FR, Rw 45dB                          |
-| DW.451    | 6     | 28               | Gypwall Single Frame, 122mm, 60min FR, Rw 49dB                         |
-| DW.452    | 7     | 34               | Gypwall Single Frame Enhanced, 154mm, 90min FR, Rw 57dB                |
-| DW.453    | 9     | 40               | Gypwall Single Frame, 144mm, 120min FR, Rw 50dB                        |
-| DW.454    | 2     | 8                | Gypwall Single Frame, 124mm, N/A FR, Rw 44dB                           |
-| SH.451    | 7     | 30               | Shaftwall, 139mm, 90min FR, Rw 45dB                                    |
-| SH.452    | 4     | 16               | Shaftwall, 107mm, 120min FR, Rw 45dB                                   |
-| SH.453    | 3     | 12               | Shaftwall, 139mm, 120min FR, Rw 45dB                                   |
+| Wall Type | Count | Total Length (m) | Description |
+|-----------|-------|------------------|-------------|
+| SW.401    | 18    | 140              | Medium density paint quality blockwork, 140mm thick, 120min fire rating, Rw 45dB acoustic |
+| WL.401    | 22    | 110              | Wall lining (Gyproc GypLyner IWL), general lining to blockwork/RC, 100mm+26mm finishes |
+| WL.402    | 7     | 28               | Independent wall lining (GypLyner IWL), for shower/corridors, 124mm thick |
+| WL.404    | 10    | 40               | Thermally insulated independent wall lining, 165mm thick |
+| WL.405    | 4     | 16               | Thermally insulated wall lining, 300mm thick |
+| WL.406    | 8     | 32               | Independent wall lining, 102mm thick |
+| WL.407    | 3     | 12               | Independent wall lining (superloos), 181-206mm thick |
+| WL.408    | 2     | 8                | Independent wall lining to East Party Wall, 97mm thick |
+| WL.409    | 2     | 8                | DriLyner Dab lining system, 25mm thick |
+| DW.451    | 9     | 36               | Gypwall Single Frame, 122mm thick, 60min fire, Rw 49dB |
+| DW.452    | 8     | 32               | Gypwall Single Frame Enhanced, 154mm thick, 90min fire, Rw 57dB |
+| DW.453    | 10    | 40               | Gypwall Single Frame, 144mm thick, 120min fire, Rw 50dB |
+| DW.454    | 2     | 8                | Gypwall Single Frame, 124mm thick, for pocket doors |
+| SH.451    | 7     | 28               | Shaftwall, 139mm thick, 90min fire, Rw 44dB |
+| SH.452    | 4     | 16               | Shaftwall, 107mm thick, 120min fire, Rw 45dB |
+| SH.453    | 3     | 12               | Shaftwall, 139mm thick, 120min fire, Rw 45dB |
+| SW.402    | 1     | 6                | 215mm brickwork, UKPN wall, 240min fire, Rw 59dB |
+| VL.401    | 1     | 4                | (Noted on plan, assumed variant of wall lining, see summary) |
+| NL.401    | 1     | 4                | (Noted on plan, assumed variant of wall lining, see summary) |
+| NL.402    | 1     | 4                | (Noted on plan, assumed variant of wall lining, see summary) |
+| NI.404    | 1     | 4                | (Noted on plan, assumed variant of wall lining, see summary) |
 
-> **Note:** Lengths are rounded to nearest metre for clarity. Counts are per continuous wall run or segment as tagged.
-
----
-
-## Step 2: UK-Style Bill of Quantities (BoQ)
-
-**Sample rates** are provided for illustration and based on typical UK market rates for commercial drylining and blockwork (2024). Actual rates may vary.
-
-| Item No. | Description of Work                                      | Unit | Quantity | Rate (£) | Total (£)  |
-|----------|----------------------------------------------------------|------|----------|----------|------------|
-| 1.1      | SW.401: 140mm blockwork wall, 120min FR, Rw 45dB         | m    | 120      | 85.00    | 10,200.00  |
-| 1.2      | WL.401: Wall lining, BG GypLyner IWL, 100mm+26mm         | m    | 95       | 38.00    | 3,610.00   |
-| 1.3      | WL.402: Independent wall lining, BG GypLyner IWL, 124mm  | m    | 38       | 44.00    | 1,672.00   |
-| 1.4      | WL.404: Thermally insulated independent wall lining, 165mm| m    | 52       | 52.00    | 2,704.00   |
-| 1.5      | WL.405: Thermally insulated wall lining, 300mm, 90min FR | m    | 18       | 60.00    | 1,080.00   |
-| 1.6      | WL.406: Independent wall lining, 102mm                   | m    | 30       | 40.00    | 1,200.00   |
-| 1.7      | WL.407: Independent wall lining (superloos), 181-206mm   | m    | 12       | 48.00    | 576.00     |
-| 1.8      | WL.408: Independent wall lining (party wall), 97mm, 120min| m    | 8        | 55.00    | 440.00     |
-| 1.9      | WL.409: DriLyner Dab lining, 25mm, 120min FR             | m    | 8        | 35.00    | 280.00     |
-| 1.10     | DW.451: Gypwall Single Frame, 122mm, 60min FR            | m    | 28       | 42.00    | 1,176.00   |
-| 1.11     | DW.452: Gypwall Single Frame Enhanced, 154mm, 90min FR   | m    | 34       | 48.00    | 1,632.00   |
-| 1.12     | DW.453: Gypwall Single Frame, 144mm, 120min FR           | m    | 40       | 52.00    | 2,080.00   |
-| 1.13     | DW.454: Gypwall Single Frame, 124mm, N/A FR              | m    | 8        | 40.00    | 320.00     |
-| 1.14     | SH.451: Shaftwall, 139mm, 90min FR                       | m    | 30       | 60.00    | 1,800.00   |
-| 1.15     | SH.452: Shaftwall, 107mm, 120min FR                      | m    | 16       | 65.00    | 1,040.00   |
-| 1.16     | SH.453: Shaftwall, 139mm, 120min FR                      | m    | 12       | 65.00    | 780.00     |
+> **Note:** Lengths are rounded estimates based on visual scaling and wall segment counts.
 
 ---
 
-## Summary of Assumptions
+## 2. Bill of Quantities (BoQ) – Sample Rates
 
-- **Counts and lengths** are based solely on visible tags and wall runs on the main floor plan, measured using the 1:125 scale and grid for reference. Where wall tags repeat on a continuous run, only one count is taken per run.
-- **Lengths** are estimated by scaling wall runs against the grid and scale bar; actual site measurement may vary.
-- **Descriptions** are matched from supplementary detail sheets (Images 2–5) and summarised for clarity.
-- **Rates** are sample market rates for 2024, rounded for BoQ purposes. Actual rates should be confirmed by tender or QS.
-- **Units** are linear metres unless otherwise specified by the wall type (none were area-based in this set).
-- All wall types found on the plan were matched to a technical description; none remain unmatched.
-- No allowance made for openings, doors, or deductions—gross wall lengths only.
-- No additional items (e.g., pattressing, fire stopping, acoustic sealant) are included in the BoQ; these should be measured separately if required.
+| Item No. | Description of Work                                 | Unit | Quantity | Rate (£) | Total (£) |
+|----------|-----------------------------------------------------|------|----------|----------|-----------|
+| 1.1      | SW.401: 140mm blockwork wall                        | m    | 140      | 95.00    | 13,300.00 |
+| 1.2      | WL.401: Wall lining (Gyproc GypLyner IWL)           | m    | 110      | 38.00    | 4,180.00  |
+| 1.3      | WL.402: Independent wall lining                     | m    | 28       | 44.00    | 1,232.00  |
+| 1.4      | WL.404: Thermally insulated independent wall lining | m    | 40       | 52.00    | 2,080.00  |
+| 1.5      | WL.405: Thermally insulated wall lining             | m    | 16       | 60.00    | 960.00    |
+| 1.6      | WL.406: Independent wall lining                     | m    | 32       | 44.00    | 1,408.00  |
+| 1.7      | WL.407: Independent wall lining (superloos)         | m    | 12       | 48.00    | 576.00    |
+| 1.8      | WL.408: Ind. wall lining to East Party Wall         | m    | 8        | 48.00    | 384.00    |
+| 1.9      | WL.409: DriLyner Dab lining system                  | m    | 8        | 32.00    | 256.00    |
+| 1.10     | DW.451: Gypwall Single Frame, 60min fire            | m    | 36       | 54.00    | 1,944.00  |
+| 1.11     | DW.452: Gypwall Single Frame Enhanced, 90min fire   | m    | 32       | 62.00    | 1,984.00  |
+| 1.12     | DW.453: Gypwall Single Frame, 120min fire           | m    | 40       | 68.00    | 2,720.00  |
+| 1.13     | DW.454: Gypwall Single Frame (pocket doors)         | m    | 8        | 58.00    | 464.00    |
+| 1.14     | SH.451: Shaftwall, 90min fire                       | m    | 28       | 65.00    | 1,820.00  |
+| 1.15     | SH.452: Shaftwall, 120min fire                      | m    | 16       | 72.00    | 1,152.00  |
+| 1.16     | SH.453: Shaftwall, 120min fire                      | m    | 12       | 72.00    | 864.00    |
+| 1.17     | SW.402: 215mm brickwork (UKPN)                      | m    | 6        | 120.00   | 720.00    |
+| 1.18     | VL.401/NL.401/NL.402/NI.404: Misc. wall linings     | m    | 16       | 40.00    | 640.00    |
+
+> **Note:** Sample rates are indicative and for estimation only. Miscellaneous/variant wall linings grouped for summary.
 
 ---
 
-**If you require a more detailed breakdown (e.g., by room or by floor), or wish to include deductions for openings, please specify.**
+## 3. Summary and Assumptions
+
+### Assumptions
+- **Counts and lengths** are based solely on visual inspection of the main floor plan (first image), using the 1:125 scale and wall tags. No digital measurement tools were used; lengths are estimated by segment count and typical room dimensions.
+- **Sample rates** are based on typical UK market rates for similar wall types as of 2024. Actual rates may vary by contractor, location, and specification.
+- **Variant wall types** (VL.401, NL.401, NL.402, NI.404) are assumed to be minor variants of main wall linings, as their details are not fully clear from the plan or supplementary sheets.
+- **Grouped miscellaneous wall linings** for minor/variant types due to low frequency and lack of detailed specification.
+
+### Wall Types Not Fully Matched
+- **VL.401, NL.401, NL.402, NI.404:** These appear as variants or special cases on the plan, but their full technical details are not explicit in the supplementary sheets. They are assumed to be similar to standard wall linings for the purposes of this estimate.
+
+### Use of Supplementary Files/Images
+- **Supplementary detail sheets** were used **only** to match each wall type code (e.g., DW.451, WL.401, SW.401) to its technical description, construction build-up, fire/acoustic rating, and
