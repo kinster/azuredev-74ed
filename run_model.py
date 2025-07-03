@@ -1,5 +1,6 @@
 import os
 import base64
+import time
 from dotenv import load_dotenv
 from openai_client import AzureOpenAIClient
 from vision_ocr import AzureVisionOCRClient
@@ -27,85 +28,121 @@ print(os.getenv("AZURE_CV_ENDPOINT"))
 print(os.getenv("AZURE_CV_KEY")[:5])
 
 # Directories
-image_dir = "images"
+image_dir = "inputs/images"
 output_dir = "results"
 output_file = os.path.join(output_dir, "wall_report.md")
 os.makedirs(output_dir, exist_ok=True)
 
 # Prompts
 system_prompt = """
-You are a construction AI assistant. You specialize in interpreting architectural floor plans and drylining technical detail sheets.
+You are a construction AI assistant with expertise in interpreting architectural floor plans, internal wall types, and drylining detail sheets. You specialise in UK construction standards, including cost estimation and generating Bill of Quantities (BoQ).
 
-You are given:
-- A floor plan image that shows wall type labels and scale
-- One or more technical detail drawings that define the meaning of each wall type (e.g. WL.403, SW.401)
-- OCR-extracted text from the plan image (optional, but included if available)
+You are provided with:
+- A floor plan image that shows internal wall type labels (e.g. SW.401, WL.403) and scale (e.g. 1:125)
+- Technical detail images or sheets that describe the construction and material specifications of each wall type
+- OCR-extracted text from the plan (optional, included if available)
 
 Your task is to:
-1. Identify and list all unique wall types (e.g. WL.401, DW.451)
-2. Count how many times each appears
-3. Estimate the total length for each using the scale shown on the drawing (e.g., 1:125)
-4. Match each wall type to a description from the technical drawings
+1. Identify and list all unique wall types from the floor plan (e.g. WL.401, DW.451)
+2. Count how many times each type appears
+3. Estimate the total linear length for each based on the scale
+4. Match each wall type to its technical description from the detail drawings
+5. Return a table with the following columns:
+   | Wall Type | Count | Total Length (m) | Description                     |
+   |-----------|-------|------------------|---------------------------------|
 
-Return the results in a table like this:
+Next, using the wall type descriptions and estimated quantities, generate a UK-style Bill of Quantities (BoQ). For each wall type:
+- Assume units are in linear metres (unless clearly area-based)
+- Add sample unit rates (in £/m or £/m²) where applicable
+- Return a markdown table like this:
 
-| Wall Type | Count | Total Length (m) | Description                     |
-|-----------|-------|------------------|---------------------------------|
-| WL.401    | 6     | ~35              | Standard wall lining system     |
-| DW.451    | 4     | ~22              | Demountable dry wall partition  |
+| Item No. | Description of Work                      | Unit | Quantity | Rate (£) | Total (£) |
+|----------|------------------------------------------|------|----------|----------|------------|
+| 1.1      | WL.401: Wall lining with plasterboard     | m    | 35       | 40.00    | 1,400.00   |
+| 1.2      | DW.451: Demountable drywall partition     | m    | 22       | 48.00    | 1,056.00   |
 
-If descriptions are not clearly visible or defined, provide a best-guess based on naming patterns.
-Also include a summary of any assumptions.
+Finish with a **summary** section that lists any assumptions (e.g. rates were estimated, length measured via tag frequency and scale), and state if any wall types could not be matched.
+
+Ensure outputs are well-formatted, accurate, and concise.
 """
 
 # Store final results
 all_outputs = []
 
-# Process each image
+# Step 1: Gather images and OCR in one batch
+image_data_list = []
+ocr_snippets = []
+
 for filename in sorted(os.listdir(image_dir)):
     if filename.lower().endswith((".png", ".jpg", ".jpeg")):
         filepath = os.path.join(image_dir, filename)
 
-        # Read and encode image
         with open(filepath, "rb") as f:
-            base64_image = base64.b64encode(f.read()).decode("utf-8")
+            base64_img = base64.b64encode(f.read()).decode("utf-8")
 
-        # 🔍 Extract OCR text for the current image
         ocr_text = vision_client.extract_ocr_text(filepath)
-        print(f"🔍 OCR for {filename}:\n{ocr_text[:300]}...")  # Preview first 300 chars
+        time.sleep(2)  # 🔁 Add delay to stay under rate limit
 
-        # 👤 User prompt including the OCR text
-        user_prompt = f"""
-This is the OCR text extracted from a floor plan image showing internal wall types:
+        image_data_list.append({"filename": filename, "base64": base64_img})
+        ocr_snippets.append(f"🖼️ {filename}\n\n{ocr_text}")
 
-{ocr_text}
+# Step 2: Build single prompt
+combined_ocr_text = "\n\n".join(ocr_snippets)
 
-Please:
-- List all unique wall types (e.g. SW.401, WL.404, DW.453)
-- Count how many times each type appears in the image/OCR text
-- Estimate total length using the drawing scale (1:125)
-- Cross-reference wall types with technical details (if separate drawings are provided)
-- Return a structured markdown table with type, count, total length in metres, and description
+user_prompt = f"""
+You are given a set of architectural floor plan and detail sheet images used in drylining takeoff and estimating.
 
-The images of the floor plan and detail sheets will be passed alongside this prompt.
+Each image contains wall type labels (e.g. WL.401, DW.451) and a drawing scale (e.g. 1:125). OCR-extracted text from each image is included below for your reference.
+
+---
+
+{combined_ocr_text}
+
+---
+
+Your task is to:
+1. Identify all unique wall types from the images and OCR (e.g. WL.401, DW.451)
+2. Count how many times each appears across all drawings
+3. Estimate total linear length for each wall type using the 1:125 scale (approximate)
+4. Match each wall type to its description from the detail drawings (if visible or inferred)
+
+Return two markdown tables:
+
+**Wall Summary Table:**
+
+| Wall Type | Count | Total Length (m) | Description                     |
+|-----------|-------|------------------|---------------------------------|
+
+**UK Bill of Quantities Table:**
+
+| Item No. | Description of Work                      | Unit | Quantity | Rate (£) | Total (£) |
+|----------|------------------------------------------|------|----------|----------|------------|
+
+Add a summary of assumptions:
+- Rate approximations
+- Drawing scale interpretation
+- Any unmatched or ambiguous wall types
 """
+print(combined_ocr_text)
 
-        # 🧠 Send to GPT-4o (Azure OpenAI)
-        result = openai_client.analyze_image_with_text(
-            system_prompt=system_prompt,
-            user_prompt=user_prompt,
-            base64_image=base64_image
-        )
+# Step 3: Make a single API call
+result = openai_client.analyze_image_with_text(
+    system_prompt=system_prompt,
+    user_prompt=user_prompt,
+    base64_image_list=[img["base64"] for img in image_data_list]
+)
 
-        # 📦 Collect output per image
-        formatted = f"## 🖼️ {filename}\n\n{result}"
-        all_outputs.append(formatted)
+# Output formatting
+output = f"# 📐 Drylining Wall Type & BoQ Summary\n\n{result}"
 
-# 🧾 Final combined report
+
 timestamp = datetime.now().strftime('%Y-%m-%d %H:%M')
-full_report = f"# 🧱 Wall Analysis Report\nGenerated on {timestamp}\n\n" + "\n\n".join(all_outputs)
+full_report = f"# 🧱 Wall Analysis Report\nGenerated on {timestamp}\n\n{result}"
 
-# Save to file
+# Save to user-specified output file (e.g. Markdown)
+output_file = "wall_analysis_report.md"
+
+# Save report to file
 with open(output_file, "w", encoding="utf-8") as f:
     f.write(full_report)
 
