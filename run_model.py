@@ -38,16 +38,14 @@ system_prompt = """
 You are a construction AI assistant with expertise in interpreting architectural floor plans, internal wall types, and drylining detail sheets. You specialise in UK construction standards, including cost estimation and generating Bill of Quantities (BoQ).
 
 You are provided with:
-- A floor plan image that shows internal wall type labels (e.g. SW.401, WL.403) and scale (e.g. 1:125)
-- Technical detail images or sheets that describe the construction and material specifications of each wall type
-- OCR-extracted text from the plan (optional, included if available)
+- One main floor plan image that shows internal wall type labels (e.g. SW.401, WL.403) and scale (e.g. 1:125)
+- Additional supplementary images or documents (such as technical detail sheets) that describe the construction and material specifications of each wall type
+- OCR-extracted text from the plan and supplementary documents (optional, included if available)
 
 Your task is to:
-1. Identify and list all unique wall types from the floor plan (e.g. WL.401, DW.451)
-2. Count how many times each type appears
-3. Estimate the total linear length for each based on the scale
-4. Match each wall type to its technical description from the detail drawings
-5. Return a table with the following columns:
+1. Use **only the main floor plan image** to identify and list all unique wall types (e.g. WL.401, DW.451), count how many times each type appears, and estimate the total linear length for each based on the scale.
+2. Use the supplementary documents **only for reference** to match each wall type to its technical description and specifications.
+3. Return a table with the following columns:
    | Wall Type | Count | Total Length (m) | Description                     |
    |-----------|-------|------------------|---------------------------------|
 
@@ -90,9 +88,12 @@ for filename in sorted(os.listdir(image_dir)):
 combined_ocr_text = "\n\n".join(ocr_snippets)
 
 user_prompt = f"""
-You are given a set of architectural floor plan and detail sheet images used in drylining takeoff and estimating.
+You are given a set of architectural images and documents used in drylining takeoff and estimating.
 
-Each image contains wall type labels (e.g. WL.401, DW.451) and a drawing scale (e.g. 1:125). OCR-extracted text from each image is included below for your reference.
+- The **first image** is the main floor plan to be used for identifying and counting wall types.
+- The **remaining images/documents** are supplementary and should only be used for reference (e.g., technical details, specifications).
+
+OCR-extracted text from each image is included below for your reference.
 
 ---
 
@@ -101,29 +102,10 @@ Each image contains wall type labels (e.g. WL.401, DW.451) and a drawing scale (
 ---
 
 Your task is to:
-1. Identify all unique wall types from the images and OCR (e.g. WL.401, DW.451)
-2. Count how many times each appears across all drawings
-3. Estimate total linear length for each wall type using the 1:125 scale (approximate)
-4. Match each wall type to its description from the detail drawings (if visible or inferred)
-
-Return two markdown tables:
-
-**Wall Summary Table:**
-
-| Wall Type | Count | Total Length (m) | Description                     |
-|-----------|-------|------------------|---------------------------------|
-
-**UK Bill of Quantities Table:**
-
-| Item No. | Description of Work                      | Unit | Quantity | Rate (£) | Total (£) |
-|----------|------------------------------------------|------|----------|----------|------------|
-
-Add a summary of assumptions:
-- Rate approximations
-- Drawing scale interpretation
-- Any unmatched or ambiguous wall types
+1. Identify all unique wall types, count, and measure **using only the main floor plan (first image)**.
+2. Use supplementary documents only to clarify or describe wall types.
+3. Return two markdown tables as before, and a summary of assumptions.
 """
-print(combined_ocr_text)
 
 # Step 3: Make a single API call
 result = openai_client.analyze_image_with_text(
