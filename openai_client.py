@@ -1,3 +1,4 @@
+import time
 from openai import AzureOpenAI
 
 class AzureOpenAIClient:
@@ -9,7 +10,7 @@ class AzureOpenAIClient:
         )
         self.deployment_name = deployment_name
 
-    def analyze_image_with_text(self, system_prompt, user_prompt, base64_image_list):
+    def analyze_image_with_text(self, system_prompt, user_prompt, base64_image_list, temperature=0, top_p=1, max_tokens=2000):
         """
         Accepts a list of base64 images and sends them all in a single prompt.
         """
@@ -22,8 +23,9 @@ class AzureOpenAIClient:
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": content}
             ],
-            temperature=0.2,
-            max_tokens=2000
+            temperature=temperature,
+            top_p=top_p,
+            max_tokens=max_tokens
         )
         return response.choices[0].message.content
 
@@ -63,6 +65,7 @@ class AzureOpenAIClient:
                         {"role": "user", "content": content}
                     ],
                     temperature=0,
+                    top_p=1,
                     max_tokens=100
                 )
                 break  # Success!

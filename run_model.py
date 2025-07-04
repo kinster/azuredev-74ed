@@ -16,7 +16,8 @@ from openpyxl import Workbook
 load_dotenv()
 openai_client = AzureOpenAIClient(
     api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-    api_version="2024-05-01-preview",
+    # api_version="2024-05-01-preview",
+    api_version=os.getenv("AZURE_OPENAI_VERSION"),
     endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
     deployment_name=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME")
 )
@@ -79,18 +80,45 @@ ocr_snippets = []
 for filename in sorted(os.listdir(image_dir)):
     if filename.lower().endswith((".png", ".jpg", ".jpeg")):
         filepath = os.path.join(image_dir, filename)
-
         with open(filepath, "rb") as f:
             base64_img = base64.b64encode(f.read()).decode("utf-8")
-
         ocr_text = vision_client.extract_ocr_text(filepath)
-        time.sleep(2)  # 🔁 Add delay to stay under rate limit
-
-        image_data_list.append({"filename": filename, "base64": base64_img})
+        time.sleep(3)  # 🔁 Add delay to stay under rate limit
+        image_data_list.append({"filename": filename, "base64": base64_img, "filepath": filepath})
         ocr_snippets.append(f"🖼️ {filename}\n\n{ocr_text}")
 
+# --- NEW: Classify images to find main and supplementary ---
+results = openai_client.classify_documents(image_data_list)
+print(f"Classified (results) images as main or supplementary.")
+main_images = [img for img, label in results if label == "main"]
+
+if not main_images:
+    raise Exception("No main image detected by classification.")
+main_image_filename = main_images[0]  # Use the first main image found
+
+# Use the main image and all supplementary images (restore previous logic)
+main_image_data = next(img for img in image_data_list if img["filename"] == main_image_filename)
+main_ocr_snippet = next(snippet for snippet in ocr_snippets if snippet.startswith(f"🖼️ {main_image_filename}"))
+supplementary_image_data = [img for img in image_data_list if img["filename"] != main_image_filename]
+supplementary_ocr_snippets = [snippet for snippet in ocr_snippets if not snippet.startswith(f"🖼️ {main_image_filename}")]
+ordered_image_data_list = [main_image_data] + supplementary_image_data
+ordered_ocr_snippets = [main_ocr_snippet] + supplementary_ocr_snippets
+
 # Step 2: Build single prompt
-combined_ocr_text = "\n\n".join(ocr_snippets)
+combined_ocr_text = "\n\n".join(ordered_ocr_snippets)
+
+# print(f"Combined OCR text from {len(ordered_ocr_snippets)} images:\n{combined_ocr_text}\n")
+
+# Extract wall types from the main OCR snippet
+def extract_wall_types_from_ocr(ocr_text):
+    # Naive extraction: look for patterns like WL.401, DW.451, etc.
+    # This may need to be adjusted based on actual OCR output format
+    pattern = r"\b(WL|DW|SW)\.\d{3}\b"
+    matches = re.findall(pattern, ocr_text)
+    return list(set(matches))  # Return unique wall types
+
+main_wall_types = extract_wall_types_from_ocr(main_ocr_snippet)
+wall_types_str = ", ".join(main_wall_types)
 
 user_prompt = f"""
 You are given a set of architectural images and documents used in drylining takeoff and estimating.
@@ -106,18 +134,26 @@ OCR-extracted text from each image is included below for your reference.
 
 ---
 
+The following wall types were identified in the main floor plan: {wall_types_str}.
+Only include these wall types in the BoQ. Do not add any others.
+
+**When presenting any tables (including wall type summary and BoQ), order the rows by wall type code in ascending alphabetical order (e.g., DW.451, DW.452, SW.401, WL.401, etc.).**
+
 Your task is to:
 1. Identify all unique wall types, count, and measure **using only the main floor plan (first image)**.
 2. Use supplementary documents only to clarify or describe wall types, not for counting or measurement.
-3. Return two markdown tables as before, and a summary of assumptions.
-4. **In your summary, clearly state how the supplementary files/images were used in your analysis.**
+3. **Only include wall types in the BoQ that are actually found and counted in the main floor plan image. Do not add wall types that are only present in supplementary documents.**
+4. Return two markdown tables as before, and a summary of assumptions. Do not include any sample or example BoQ tables. Only output the BoQ table generated from the main floor plan image. There should be only one BoQ table in your output.
+5. In your summary, clearly state how the supplementary files/images were used in your analysis.
 """
 
 # Step 3: Make a single API call
 result = openai_client.analyze_image_with_text(
     system_prompt=system_prompt,
     user_prompt=user_prompt,
-    base64_image_list=[img["base64"] for img in image_data_list]
+    base64_image_list=[img["base64"] for img in ordered_image_data_list],
+    temperature=0,
+    top_p=1,  # Set your desired top_p value here (e.g., 1 for deterministic, <1 for more randomness)
 )
 
 # Output formatting
@@ -171,14 +207,11 @@ console = Console()
 console.print(full_report, markup=False)
 
 def extract_boq_table(markdown_text):
-    """
-    Extracts the BoQ markdown table from the report and returns it as a list of rows.
-    """
     pattern = r"\| *Item No\. *\|.*?\|\n\|[-| ]+\|\n((?:\|.*\|\n?)+)"
-    match = re.search(pattern, markdown_text, re.DOTALL)
-    if not match:
+    matches = list(re.finditer(pattern, markdown_text, re.DOTALL))
+    if not matches:
         return []
-    table_text = match.group(0)
+    table_text = matches[-1].group(0)  # Use the last match
     rows = [
         [cell.strip() for cell in row.split("|")[1:-1]]
         for row in table_text.strip().split("\n")

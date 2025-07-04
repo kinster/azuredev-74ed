@@ -1,0 +1,4 @@
+azure-functions
+python-dotenv
+pillow
+# Add any other dependencies your vision_ocr.py needs

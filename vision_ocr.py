@@ -33,7 +33,7 @@ class AzureVisionOCRClient:
         try:
             with open(image_path, "rb") as image_stream:
                 ocr_result = self.client.read_in_stream(image_stream, raw=True)
-            print(ocr_result)
+            # print(ocr_result)
         except Exception as e:
             if hasattr(e, 'response') and hasattr(e.response, 'content'):
                 print("Azure error response:", e.response.content)

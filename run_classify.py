@@ -32,7 +32,14 @@ for filename in sorted(os.listdir(image_dir)):
 
 # Step 2: Classify images using OpenAI client
 results = openai_client.classify_documents(image_data_list)
-print(f"Classified {results} images.")
+
+# Find the main image(s) and supplementary images
+main_images = [filename for filename, label in results if label == "main"]
+supplementary_images = [filename for filename, label in results if label == "detail"]
+
+print(f"Main image(s): {main_images}")
+print(f"Supplementary images: {supplementary_images}")
+
 # Output results
 for filename, label in results:
     print(f"{filename}: {label}")
