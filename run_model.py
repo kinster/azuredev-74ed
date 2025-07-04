@@ -107,6 +107,7 @@ ordered_ocr_snippets = [main_ocr_snippet] + supplementary_ocr_snippets
 # Step 2: Build single prompt
 combined_ocr_text = "\n\n".join(ordered_ocr_snippets)
 
+print(ordered_image_data_list.__len__(), "images processed.")
 # print(f"Combined OCR text from {len(ordered_ocr_snippets)} images:\n{combined_ocr_text}\n")
 
 # Extract wall types from the main OCR snippet
