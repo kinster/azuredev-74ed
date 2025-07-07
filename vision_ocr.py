@@ -4,13 +4,15 @@ from msrest.authentication import CognitiveServicesCredentials
 import time
 from PIL import Image
 import os
+from azure.ai.formrecognizer import DocumentAnalysisClient
+from azure.core.credentials import AzureKeyCredential
 
 class AzureVisionOCRClient:
     """
     Wrapper for Azure Computer Vision OCR.
     """
     def __init__(self, endpoint, api_key):
-        self.client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(api_key))
+        self.computer_vision_client = ComputerVisionClient(endpoint, CognitiveServicesCredentials(api_key))
 
     def extract_ocr_text(self, image_path, max_retries=30, retry_delay=1):
         """
@@ -32,7 +34,7 @@ class AzureVisionOCRClient:
 
         try:
             with open(image_path, "rb") as image_stream:
-                ocr_result = self.client.read_in_stream(image_stream, raw=True)
+                ocr_result = self.computer_vision_client.read_in_stream(image_stream, raw=True)
             # print(ocr_result)
         except Exception as e:
             if hasattr(e, 'response') and hasattr(e.response, 'content'):
@@ -43,7 +45,7 @@ class AzureVisionOCRClient:
         operation_id = operation_location.split("/")[-1]
 
         for _ in range(max_retries):
-            result = self.client.get_read_result(operation_id)
+            result = self.computer_vision_client.get_read_result(operation_id)
             if result.status not in ['notStarted', 'running']:
                 break
             time.sleep(retry_delay)
@@ -56,6 +58,8 @@ class AzureVisionOCRClient:
                 for line in page.lines:
                     lines.append(line.text)
         return "\n".join(lines)
+    
+
 
 def compress_image(input_path, output_path, max_size_mb=4):
     print(f"Compressing image {input_path} to {output_path} with max size {max_size_mb}MB")

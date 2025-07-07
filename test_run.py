@@ -14,20 +14,15 @@ from weasyprint import HTML, CSS
 import re
 from openpyxl import Workbook
 
-endpoint = "https://walldetection-resource.cognitiveservices.azure.com/"
-model_name = "gpt-4o"
-deployment = "gpt-4o"
-
-subscription_key = "BU3QXrqlrY4D1sh0u1My3pSL9zzQlkYav20OXHPa5ppRRhsCqQDAJQQJ99BGACHYHv6XJ3w3AAAAACOGSRa3"
-api_version = "2024-12-01-preview"
-
 # Load API credentials
 load_dotenv()
+deploy_version = os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME")
 openai_client = AzureOpenAIClient(
-    api_key=subscription_key,
-    api_version=api_version,
-    endpoint=endpoint,
-    deployment_name=deployment
+    api_key=os.getenv("AZURE_OPENAI_API_KEY"),
+    # api_version="2024-05-01-preview",
+    api_version=os.getenv("AZURE_OPENAI_VERSION"),
+    endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
+    deployment_name=deploy_version
 )
 
 # Directories

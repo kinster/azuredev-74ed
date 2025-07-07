@@ -1,3 +1,142 @@
+18 core types if you group similar codes (e.g., all DW.xxx as one)
+Up to 23 specific codes if treating every variation as a distinct type
+think about variations
+
+| No. | Code    | Description                           |
+| --- | ------- | ------------------------------------- |
+| 1   | DW\.451 | Dry wall                              |
+| 2   | DW\.452 | Dry wall                              |
+| 3   | DW\.453 | Dry wall                              |
+| 4   | DW\.454 | Dry wall                              |
+| 5   | SH.451  | Shaft wall                            |
+| 6   | SH.452  | Shaft wall                            |
+| 7   | SH.453  | Shaft wall                            |
+| 8   | WL.401  | Wall lining                           |
+| 9   | WL.402  | Independent wall lining               |
+| 10  | WL.403  | Acoustic wall lining                  |
+| 11  | WL.404  | Thermally insulated wall lining       |
+| 12  | WL.405  | Thermally insulated wall lining       |
+| 13  | WL.406  | Independent wall lining               |
+| 14  | WL.407  | Independent wall lining               |
+| 15  | WL.408  | Independent wall lining to party wall |
+| 16  | WL.409  | DriLyner Dab lining system            |
+| 17  | SW\.401 | Blockwork wall                        |
+| 18  | SW\.452 | Brickwork wall                        |
+| 19  | CC.401  | Column casing – refer to 4.K10/265    |
+
+| No. | Code     | Notes                                   |
+| --- | -------- | --------------------------------------- |
+| 20  | DW\.401  | Mentioned in lower-level storage        |
+| 21  | DW\.401a | With double studs & recessed handrail   |
+| 22  | DW\.402  | High-level dry wall above glazed screen |
+| 23  | DW\.451a | Variant seen in drawing annotations     |
+
+Floorplan
+SW.401, WL.401, WL.402, WL.404, WL.405, WL.406, WL.407, DW.451, DW.452, DW.453
+| No. | Code | Description |
+| --- | ------- | ------------------------------- |
+| 1 | SW\.401 | Blockwork wall |
+| 2 | WL.401 | Wall lining |
+| 3 | WL.402 | Independent wall lining |
+| 4 | WL.404 | Thermally insulated wall lining |
+| 5 | WL.405 | Thermally insulated wall lining |
+| 6 | WL.406 | Independent wall lining |
+| 7 | WL.407 | Independent wall lining |
+| 8 | DW\.451 | Dry wall |
+| 9 | DW\.452 | Dry wall |
+| 10 | DW\.453 | Dry wall |
+
+Detailed sheets
+SW.402, SW.452, WL.403, WL.408, WL.409, DW.454, W.451, W.451a, DW.401
+| No. | Code | Description |
+| --- | ------- | ------------------------------------- |
+| 1 | SW\.402 | Blockwork wall |
+| 2 | SW\.452 | Brickwork wall |
+| 3 | WL.403 | Acoustic wall lining |
+| 4 | WL.408 | Independent wall lining to party wall |
+| 5 | WL.409 | DriLyner Dab lining system |
+| 6 | DW\.454 | Dry wall |
+| 7 | W\.451 | (Possibly misread — likely DW\.451) |
+| 8 | W\.451a | (Possibly misread — likely DW\.451a) |
+| 9 | DW\.401 | Dry wall (low level) |
+
+| No. | Code    | Description                           |
+| --- | ------- | ------------------------------------- |
+| 1   | DW\.451 | Dry wall                              |
+| 2   | DW\.452 | Dry wall                              |
+| 3   | DW\.453 | Dry wall                              |
+| 4   | DW\.454 | Dry wall                              |
+| 5   | SH.451  | Shaft wall                            |
+| 6   | SH.452  | Shaft wall                            |
+| 7   | SH.453  | Shaft wall                            |
+| 8   | WL.401  | Wall lining                           |
+| 9   | WL.402  | Independent wall lining               |
+| 10  | WL.403  | Acoustic wall lining                  |
+| 11  | WL.404  | Thermally Insulated wall lining       |
+| 12  | WL.405  | Thermally Insulated wall lining       |
+| 13  | WL.406  | Independent wall lining               |
+| 14  | WL.407  | Independent wall lining               |
+| 15  | WL.408  | Independent wall lining to Party wall |
+| 16  | WL.409  | DriLyner Dab lining system            |
+| 17  | SW\.401 | Blockwork wall                        |
+| 18  | SW\.452 | Brickwork wall                        |
+| 19  | CC.401  | Column casing                         |
+
+19 Wall types
+
+| No. | Code     | Wall Type Description                 |
+| --- | -------- | ------------------------------------- |
+| 1   | DW\.451  | Dry wall                              |
+| 2   | DW\.451a | Dry wall (variant)                    |
+| 3   | DW\.452  | Dry wall                              |
+| 4   | DW\.453  | Dry wall                              |
+| 5   | DW\.454  | Dry wall                              |
+| 6   | SH.451   | Shaft wall                            |
+| 7   | SH.452   | Shaft wall                            |
+| 8   | SH.453   | Shaft wall                            |
+| 9   | WL.401   | Wall lining                           |
+| 10  | WL.402   | Independent wall lining               |
+| 11  | WL.403   | Acoustic wall lining                  |
+| 12  | WL.404   | Thermally Insulated wall lining       |
+| 13  | WL.405   | Thermally Insulated wall lining       |
+| 14  | WL.406   | Independent wall lining               |
+| 15  | WL.407   | Independent wall lining               |
+| 16  | WL.408   | Independent wall lining to party wall |
+| 17  | WL.409   | DriLyner Dab lining system            |
+| 18  | SW\.401  | Blockwork wall                        |
+| 19  | SW\.452  | Brickwork wall                        |
+| 20  | CC.401   | Column casing                         |
+
+20 Wall types
+
+| No. | Code     | Description                                   |
+| --- | -------- | --------------------------------------------- |
+| 1   | DW\.401  | Dry wall (low level storage space)            |
+| 2   | DW\.401a | Dry wall (92 double studs, recessed handrail) |
+| 3   | DW\.402  | Dry wall (at high level above glazed screen)  |
+| 4   | DW\.451  | Dry wall                                      |
+| 5   | DW\.451a | Dry wall                                      |
+| 6   | DW\.452  | Dry wall                                      |
+| 7   | DW\.453  | Dry wall                                      |
+| 8   | DW\.454  | Dry wall                                      |
+| 9   | SH.451   | Shaft wall                                    |
+| 10  | SH.452   | Shaft wall                                    |
+| 11  | SH.453   | Shaft wall                                    |
+| 12  | WL.401   | Wall lining                                   |
+| 13  | WL.402   | Independent wall lining                       |
+| 14  | WL.403   | Acoustic wall lining                          |
+| 15  | WL.404   | Thermally insulated wall lining               |
+| 16  | WL.405   | Thermally insulated wall lining               |
+| 17  | WL.406   | Independent wall lining                       |
+| 18  | WL.407   | Independent wall lining                       |
+| 19  | WL.408   | Independent wall lining to party wall         |
+| 20  | WL.409   | DriLyner Dab lining system                    |
+| 21  | SW\.401  | Blockwork wall                                |
+| 22  | SW\.452  | Brickwork wall                                |
+| 23  | CC.401   | Column casing (referenced elsewhere)          |
+
+Based on Key codes
+
 ## Step 2: Bill of Quantities (BoQ) – Sample Rates
 
 | Item No. | Description of Work                                     | Unit | Quantity | Rate (£) | Total (£) |
@@ -466,5 +605,33 @@ varies depending on location. |
 | 1.4      | SW.401: Medium density blockwork wall   | m    | 45.00    | 75.00    | 3,375.00  |
 | 1.5      | WL.401: Wall lining system              | m    | 60.00    | 40.00    | 2,400.00  |
 | 1.6      | WL.404: Thermally insulated wall lining | m    | 30.00    | 50.00    | 1,500.00  |
+
+---
+
+### Wall Type Summary Table
+
+| Wall Type | Count | Total Length (m) | Description                                                                                                                                           |
+| --------- | ----- | ---------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| DW.451    | 12    | 36.00            | Gypwall Single Frame partition for core, reception, and shower rooms. Fire rating: 60min, Acoustic rating: Rw 49dB. Thickness: 122mm.                 |
+| DW.452    | 8     | 24.00            | Gypwall Single Frame Enhanced partition for core, ground floor circulation, and reception. Fire rating: 90min, Acoustic rating: Rw 57dB. Thickness:   |
+| 154mm.    |
+| DW.453    | 6     | 18.00            | Gypwall Single Frame partition for basement circulation and FF lobby. Fire rating: 120min, Acoustic rating: Rw 45dB. Thickness: 144mm.                |
+| SW.401    | 15    | 45.00            | Medium density paint quality blockwork wall. Fire rating: 120min, Acoustic rating: Rw 45dB. Thickness: 140mm.                                         |
+| WL.401    | 20    | 60.00            | Wall lining for all levels including reception, circulation, office areas, and staircases. Fire rating: N/A, Acoustic rating: N/A. Thickness: 100mm + |
+| finishes. |
+| WL.402    | 10    | 30.00            | Independent wall lining for shower rooms, reception, and circulation corridors. Fire rating: N/A, Acoustic rating: N/A. Thickness: varies.            |
+
+---
+
+### Bill of Quantities (BoQ)
+
+| Item No. | Description of Work                    | Unit | Quantity | Rate (£) | Total (£) |
+| -------- | -------------------------------------- | ---- | -------- | -------- | --------- |
+| 1.1      | DW.451: Gypwall Single Frame partition | m    | 36.00    | 48.00    | 1,728.00  |
+| 1.2      | DW.452: Gypwall Single Frame Enhanced  | m    | 24.00    | 55.00    | 1,320.00  |
+| 1.3      | DW.453: Gypwall Single Frame partition | m    | 18.00    | 60.00    | 1,080.00  |
+| 1.4      | SW.401: Medium density blockwork wall  | m    | 45.00    | 75.00    | 3,375.00  |
+| 1.5      | WL.401: Wall lining                    | m    | 60.00    | 40.00    | 2,400.00  |
+| 1.6      | WL.402: Independent wall lining        | m    | 30.00    | 50.00    | 1,500.00  |
 
 ---
