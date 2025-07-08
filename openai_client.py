@@ -29,6 +29,19 @@ class AzureOpenAIClient:
         )
         return response.choices[0].message.content
 
+    def ask_with_text(self, system_prompt, user_prompt, temperature=0, top_p=1, max_tokens=2000):
+        response = self.client.chat.completions.create(
+            model=self.deployment_name,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            temperature=temperature,
+            top_p=top_p,
+            max_tokens=max_tokens
+        )
+        return response.choices[0].message.content
+
     def classify_documents(self, image_data_list):
         """
         Classifies each image as 'main' or 'detail' based on its content.

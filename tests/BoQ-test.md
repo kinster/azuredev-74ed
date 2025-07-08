@@ -1,3 +1,58 @@
+Total unique wall types found: 19
+DW.451
+DW.452
+DW.453
+DW.454
+SH.451
+SH.452
+SH.453
+WL.401
+WL.402
+WL.403
+WL.404
+WL.405
+WL.406
+WL.407
+WL.408
+WL.409
+SW.401
+SW.452
+CC.401
+Here is the breakdown of wall types based on the provided codes:
+
+1. **DW (Drywall)**: These are typically lightweight partition walls made using plasterboard on a metal or timber stud framework.
+
+   - **DW.451**: Standard drywall partition with specific acoustic or fire performance.
+   - **DW.452**: Enhanced drywall partition, likely with improved acoustic or fire resistance.
+   - **DW.453**: High-performance drywall, possibly for areas requiring higher durability or soundproofing.
+   - **DW.454**: Specialized drywall, potentially for wet areas or high-impact zones.
+
+2. **SH (Shaft Wall)**: These are walls designed for vertical shafts, such as elevator shafts or service risers, often with fire-rated properties.
+
+   - **SH.451**: Standard shaft wall with fire-rated performance.
+   - **SH.452**: Enhanced shaft wall with improved fire or acoustic properties.
+   - **SH.453**: High-performance shaft wall, likely for critical areas requiring higher durability.
+
+3. **WL (Wet Lining)**: These are walls designed for wet areas, such as bathrooms or kitchens, with moisture-resistant properties.
+
+   - **WL.401**: Standard wet lining wall for general wet area applications.
+   - **WL.402**: Enhanced wet lining wall with improved moisture resistance.
+   - **WL.403**: High-performance wet lining wall, likely for areas with heavy water exposure.
+   - **WL.404**: Specialized wet lining wall, possibly for commercial kitchens or industrial wet zones.
+   - **WL.405**: Wet lining wall with additional durability or impact resistance.
+   - **WL.406**: Wet lining wall with specific acoustic or fire-rated properties.
+   - **WL.407**: Advanced wet lining wall for high-demand environments.
+   - **WL.408**: Wet lining wall with integrated waterproofing systems.
+   - **WL.409**: Premium wet lining wall for critical applications.
+
+4. **SW (Solid Wall)**: These are typically masonry or concrete walls, offering high durability and structural performance.
+
+   - **SW.401**: Standard solid wall, likely blockwork or concrete.
+   - **SW.452**: Enhanced solid wall with improved acoustic or fire-rated properties.
+
+5. **CC (Concrete Core)**: These are structural concrete walls, often used in building cores for stability and fire resistance.
+   - **CC.401**: Standard concrete core wall, typically reinforced for structural integrity.
+
 18 core types if you group similar codes (e.g., all DW.xxx as one)
 Up to 23 specific codes if treating every variation as a distinct type
 think about variations

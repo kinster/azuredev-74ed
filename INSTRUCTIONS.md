@@ -8,7 +8,7 @@ Follow the instructions below to get started!
 
 ## Open the terminal
 
-Press ``Ctrl-` `` &nbsp; to open a terminal window.
+Press `` Ctrl-` `` &nbsp; to open a terminal window.
 
 ## Run your model locally
 
@@ -17,7 +17,6 @@ To run the model that you deployed in AI Foundry, and view the output in the ter
 ```bash
 python run_model.py
 ```
-
 
 ## Add, provision and deploy web app that uses the model
 
@@ -39,8 +38,6 @@ To delete the web app and stop incurring any charges, run:
 azd down
 ```
 
-
-
 ## Continuing on your local desktop
 
 You can keep working locally on VS Code Desktop by clicking "Continue On Desktop..." at the bottom left of this screen. Be sure to take the .env file with you using these steps:
@@ -49,3 +46,6 @@ You can keep working locally on VS Code Desktop by clicking "Continue On Desktop
 - Select "Download"
 - Move the file from your Downloads folder to the local git repo directory
 - For Windows, you will need to rename the file back to .env using right-click "Rename..."
+
+curl -X POST "http://localhost:8000/detect/" \
+ -F "file=@/inputs/images/CommercialBuildingInternalWallTypesGroundFloorLevel01FloorPlans-1348828089063799274_markedup_page1.png"

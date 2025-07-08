@@ -15,6 +15,7 @@ import markdown
 from weasyprint import HTML, CSS
 import re
 from openpyxl import Workbook
+from string import Template
 
 # Load API credentials
 load_dotenv()
@@ -22,7 +23,6 @@ load_dotenv()
 deploy_version = os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME")
 openai_client = AzureOpenAIClient(
     api_key=os.getenv("AZURE_OPENAI_API_KEY"),
-    # api_version="2024-05-01-preview",
     api_version=os.getenv("AZURE_OPENAI_VERSION"),
     endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"),
     deployment_name=deploy_version
@@ -30,20 +30,20 @@ openai_client = AzureOpenAIClient(
 
 print(f"Using OpenAI API version: {deploy_version}")
 
-vision_ai_endpoint = os.getenv("AZURE_CV_ENDPOINT")
-vision_ai_key = os.getenv("AZURE_CV_KEY")
+# vision_ai_endpoint = os.getenv("AZURE_CV_ENDPOINT")
+# vision_ai_key = os.getenv("AZURE_CV_KEY")
 
 di_ai_endpoint = os.getenv("AZURE_DI_ENDPOINT")
 di_ai_key= os.getenv("AZURE_DI_KEY")
 
-print(f"Using Azure Vision AI endpoint: {vision_ai_endpoint}")
-print(f"Using Azure Vision AI key: {vision_ai_key[:5]}")
+print(f"Using AZURE_DI_ENDPOINT: {di_ai_endpoint}")
+print(f"Using AZURE_DI_KEY: {di_ai_key[:5]}")
 
 
-di_client = AzureDocumentIntelligenceClient(
-    endpoint=di_ai_endpoint,
-    api_key=di_ai_key
-)
+# di_client = AzureDocumentIntelligenceClient(
+#     endpoint=di_ai_endpoint,
+#     api_key=di_ai_key
+# )
 
 wd_client = WallDetectorClient(
     endpoint=di_ai_endpoint,
@@ -92,3 +92,17 @@ count, codes = wd_client.count_wall_types_from_legend(image_data_list)
 print(f"Total unique wall types found: {count}")
 for code in codes:
     print(code)
+
+system_prompt = "You are a helpful assistant with expert knowledge of construction drawings, drylining systems, and architectural legends. When provided with internal wall codes (e.g., DW.451, WL.401), return their descriptions based on construction industry standards. Be concise and specific."
+
+template = Template("Here is a list of wall codes:\n$codes\n\nPlease tell me what type of wall each one is based on its code.")
+user_prompt = template.substitute(codes=", ".join(codes))
+
+# wd_client.debug_detected_lines(image_data_list)
+result = openai_client.ask_with_text(
+    system_prompt=system_prompt,
+    user_prompt=user_prompt,
+    temperature=0,
+    top_p=1,  # Set your desired top_p value here (e.g., 1 for deterministic, <1 for more randomness)
+)
+print(result)
