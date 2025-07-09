@@ -1,7 +1,8 @@
+# main.py
 from fastapi import FastAPI
-from app.legend_agent import app as legend_app
+from app.legend_agent import legend_router
 from app.wall_type_explainer_agent import router as explainer_router
 
 app = FastAPI()
-app.mount("/legend", legend_app)  # Now: /legend/detect/
-app.include_router(explainer_router)  # Now: /explain-wall-types
+app.include_router(legend_router, prefix="/legend")          # /legend/detect
+app.include_router(explainer_router, prefix="/explainer")    # /explainer/wall-types

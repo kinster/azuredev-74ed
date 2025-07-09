@@ -16,7 +16,7 @@ openai_client = AzureOpenAIClient(
 class WallCodeRequest(BaseModel):
     wallCodes: list[str]
 
-@router.post("/explain-wall-types")
+@router.post("/wall-types")
 async def explain_wall_types(request: WallCodeRequest):
     wallCodes = request.wallCodes
 

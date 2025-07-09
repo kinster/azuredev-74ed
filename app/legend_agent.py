@@ -1,10 +1,12 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, APIRouter, Request
 from .legend_detection import extract_wall_codes
 import os
 
+legend_router = APIRouter()
+
 app = FastAPI()
 
-@app.post("/detect/")
+@legend_router.post("/detect")
 async def detect(request: Request):
     data = await request.json()
     base64_img = data["base64"]
