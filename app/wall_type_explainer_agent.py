@@ -3,6 +3,7 @@ from pydantic import BaseModel
 import os
 from string import Template
 from openai_client import AzureOpenAIClient
+import json
 
 router = APIRouter()
 
@@ -13,23 +14,27 @@ openai_client = AzureOpenAIClient(
     deployment_name=os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME")
 )
 class WallCodeRequest(BaseModel):
-    codes: list[str]
+    wallCodes: list[str]
 
 @router.post("/explain-wall-types")
 async def explain_wall_types(request: WallCodeRequest):
-    codes = request.codes
+    wallCodes = request.wallCodes
 
-    print(codes)
+    print(wallCodes)
 
     system_prompt = (
         "You are a helpful assistant with expert knowledge of construction drawings, "
         "drylining systems, and architectural legends. When provided with internal wall codes "
-        "(e.g., DW.451, WL.401), return their descriptions based on construction industry standards. "
-        "Be concise and specific."
+        "(e.g., DW.451, WL.401), respond with a short JSON array. Each entry should contain the wall 'code' "
+        "and a short 'description' such as 'dry wall' or 'shaft wall'. Do not include explanations or formatting—just output valid JSON."
     )
 
-    template = Template("Here is a list of wall codes:\n$codes\n\nPlease tell me what type of wall each one is based on its code.")
-    user_prompt = template.substitute(codes=", ".join(codes))
+    template = Template(
+        "Here is a list of wall codes:\n$wallCodes\n\n"
+        "Return a JSON array like this: [{\"code\": \"DW.451\", \"description\": \"dry wall\"}, ...]"
+    )
+
+    user_prompt = template.substitute(wallCodes=", ".join(wallCodes))
 
     result = openai_client.ask_with_text(
         system_prompt=system_prompt,
@@ -38,4 +43,9 @@ async def explain_wall_types(request: WallCodeRequest):
         top_p=1
     )
 
-    return {"explanations": result}
+    try:
+        parsed_result = json.loads(result)
+    except json.JSONDecodeError:
+        return {"error": "Failed to parse OpenAI result"}
+
+    return parsed_result
