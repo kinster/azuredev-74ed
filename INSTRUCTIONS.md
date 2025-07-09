@@ -49,3 +49,7 @@ You can keep working locally on VS Code Desktop by clicking "Continue On Desktop
 
 curl -X POST "http://localhost:8000/detect/" \
  -F "file=@/inputs/images/CommercialBuildingInternalWallTypesGroundFloorLevel01FloorPlans-1348828089063799274_markedup_page1.png"
+
+source .venv/bin/activate
+uvicorn app.legend_agent:app --reload --port 8000
+uvicorn app.main:app --reload --port 8000
